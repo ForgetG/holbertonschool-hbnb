@@ -48,59 +48,56 @@ BusinessLogicLayer --> PersistenceLayer : Database Operations
 
 ```mermaid
 classDiagram
-class User {
+class BaseModel {
     +UUID4 id
+    +Date created_at
+    +Date updated_at
+    +create()
+    +update()
+    +delete()
+}
+class User {
     +String FirstName
     +String lastname
     +String email
     +String password
-    +boolean Admin
-    +Date createdAt
-    +Date updatedAt
-    +register()
-    +updateProfile()
-    +delete()
+    +boolean isAdmin
 }
 class Place {
-    +UUID4 id
+    +UUID4 owner_id
     +String title
     +String description
     +float price
     +float latitude
     +float longitude
     +List~Amenity~ amenities
-    +Date createdAt
-    +Date updatedAt
-    +create()
-    +update()
-    +delete()
-    +list()
+    +list_places()
 }
 class Review {
-    +UUID4 id
+    +UUID4 place_id
+    +UUID4 user_id
     +int rating
     +String comment
-    +Date createdAt
-    +Date updatedAt
-    +create()
-    +update()
-    +delete()
-    +listByPlace()
+    +list_reviews_by_place(place_id)
 }
 class Amenity {
-    +UUID4 id
     +String name
     +String description
-    +Date createdAt
-    +Date updatedAt
-    +create()
-    +update()
-    +delete()
-    +list()
+    +list_amenities()
 }
-User "1" --> "0..*" Place : owns
-Place "1" --> "0..*" Review : has
-Place "0..*" --> "0..*" Amenity : includes
+class PlaceAmenity {
+    +UUID4 place_id
+    +UUID4 ameinity_id
+}
+BaseModel <|-- User
+BaseModel <|-- Review
+BaseModel <|-- Place
+BaseModel <|-- Amenity
+User "1" *-- "0..*" Review : writes
+User "1" *-- "0..*" Place : creates
+Place "1" *-- "0..*" Review : receives
+Place "1" --> "0..*" PlaceAmenity : has
+Amenity "1" --> "0..*" PlaceAmenity : is part of
 ```
 #### Notes:
 
