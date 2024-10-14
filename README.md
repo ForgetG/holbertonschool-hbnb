@@ -113,17 +113,14 @@ Amenity "1" --> "0..*" PlaceAmenity : is part of
 
 ```mermaid
 sequenceDiagram
-participant User
-participant API
-participant BusinessLogic
-participant Database
+    participant API
+    participant Facade
+    participant User
 
-User->>API: Register User
-API->>BusinessLogic: Validate and Process Registration
-BusinessLogic->>Database: Save User Data
-Database-->>BusinessLogic: Confirm Save
-BusinessLogic-->>API: Return Registration Success/Failure
-API-->>User: Return Success/Failure
+    API->>+Facade: create_user(user_data)
+    Facade->>+User: create_instance(user_data)
+    User-->>-Facade: user_instance
+    Facade-->>-API: user_created_response
 ```
 #### Notes:
 
