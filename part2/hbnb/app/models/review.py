@@ -10,13 +10,15 @@ class Review(BaseModel):
         self.text = text
         self.rating = rating
 
-        self.place = None # store related place
-        self.user = None # store related user
+        self.place = None  # store related place
+        self.user = None  # store related user
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
         super().save()
 
     def update(self, data):
-        """Update the attributes of the object based on the provided dictionary"""
+        """
+        Update the attributes of the object based on the provided dictionary
+        """
         super().update(data)

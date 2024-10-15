@@ -20,14 +20,13 @@ class Place(BaseModel):
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
-        self.updated_at = datetime.now()
+        super().save()
 
     def update(self, data):
-        """Update the attributes of the object based on the provided dictionary"""
-        for key, value in data.items():
-            if hasattr(self, key):
-                setattr(self, key, value)
-        self.save()  # Update the updated_at timestamp
+        """
+        Update the attributes of the object based on the provided dictionary
+        """
+        super().update(data)
 
     def add_review(self, review):
         """Add a review to the place."""
