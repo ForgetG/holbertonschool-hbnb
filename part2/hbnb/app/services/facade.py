@@ -2,6 +2,7 @@
 """Module facade pattern
 """
 from app.persistence.repository import InMemoryRepository
+from ..models.place import Place
 
 
 class HBnBFacade:
@@ -43,7 +44,29 @@ class HBnBFacade:
         obj = self.get(amenity_id)
         if obj:
             obj.update(amenity_data)
+    
+    # Places methods
+    def create_place(self, place_data) -> Place:
+        # Placeholder for logic to create a place, including validation for price, latitude, and longitude
+        Place.validate_request_data(place_data)
 
-    def get_place(self, place_id):
-        # Placeholder method for fetching a place by ID
-        pass
+        place = Place(**place_data)
+        self.place_repo.add(place)
+        return place
+
+    def get_place(self, place_id) -> Place:
+        # Placeholder for logic to retrieve a place by ID, including associated owner and amenities
+        return self.place_repo.get(place_id)
+
+    def get_all_places(self) -> list:
+        # Placeholder for logic to retrieve all places
+        return list(self.place_repo.values())
+
+    def update_place(self, place_id, place_data) -> Place:
+        # Placeholder for logic to update a place
+        Place.validate_request_data(place_data)
+
+        obj = self.get_place(place_id)
+        if obj:
+            obj.update(place_data)
+        return obj

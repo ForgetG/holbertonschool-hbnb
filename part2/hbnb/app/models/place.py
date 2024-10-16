@@ -35,3 +35,17 @@ class Place(BaseModel):
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
         self.amenities.append(amenity)
+
+    @staticmethod
+    def validate_request_data(data: dict) -> None:
+        for key in data.keys():
+            value = data[key]
+            if key == "price":
+                if isinstance(value, float) is False or value < 0:
+                    raise ValueError(f"price: is incorrect, should be a non-negative float.")
+            elif key == "latitude":
+                if value < -90 or value > 90:
+                    raise ValueError(f"latitude: is incorrect, between -90 -> 90.")
+            elif key == "longitude":
+                if value < -180 or value > 180:
+                    raise ValueError(f"longitude: is incorrect, between -180 -> 180.")
