@@ -3,6 +3,8 @@
 """
 from app.persistence.repository import InMemoryRepository
 from ..models.place import Place
+from ..models.user import User
+from ..models.amenity import Amenity
 
 
 class HBnBFacade:
@@ -26,10 +28,22 @@ class HBnBFacade:
         # Placeholder method for fetching a user by email
         return self.user_repo.get_by_attribute('email', email)
 
+    def get_all_users(self):
+        # Placeholder for logic to retrieve a list of all users
+        return list(self.user_repo.get_all())
+
+    def update_user(self, user_id, user_data):
+        # Placeholder for logic to update a user
+        obj = self.get_user(user_id)
+        if obj:
+            obj.update(user_data)
+        return obj
+
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
         amenity = Amenity(**amenity_data)
         self.amenity_repo.add(amenity)
+        return amenity
 
     def get_amenity(self, amenity_id):
         # Placeholder for logic to retrieve an amenity by ID
@@ -37,18 +51,19 @@ class HBnBFacade:
 
     def get_all_amenities(self):
         # Placeholder for logic to retrieve all amenities
-        return list(self.amenity_repo.values())
+        return list(self.amenity_repo.get_all())
 
     def update_amenity(self, amenity_id, amenity_data):
         # Placeholder for logic to update an amenity
-        obj = self.get(amenity_id)
+        obj = self.get_amenity(amenity_id)
         if obj:
             obj.update(amenity_data)
+        return obj
     
     # Places methods
     def create_place(self, place_data) -> Place:
         # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        Place.validate_request_data(place_data)
+        #Place.validate_request_data(place_data)
 
         place = Place(**place_data)
         self.place_repo.add(place)
