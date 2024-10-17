@@ -4,6 +4,9 @@
 import uuid
 from datetime import datetime
 from .base_model import BaseModel
+import re
+
+regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 
 
 class User(BaseModel):
@@ -24,3 +27,16 @@ class User(BaseModel):
         Update the attributes of the object based on the provided dictionary
         """
         super().update(data)
+
+    @staticmethod
+    def validate_request_data(data: dict):
+        for key in data.keys():
+            value = data[key]
+            if key == 'first_name' or key == 'last_name':
+                if isinstance(value, str) and len(value) > 50 and len(value) < 1:
+                    raise ValueError(f"String must be less than 50 chars or not empty")
+            if key == 'email' and len(value) < 1:
+                if (re.match(regex, data["email"])):
+                    return data
+                else:
+                    raise ValueError(f"Email must follow standard email format")

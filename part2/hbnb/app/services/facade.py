@@ -17,6 +17,8 @@ class HBnBFacade:
     def create_user(self, user_data):
         # Placeholder method for creating a user
         user = User(**user_data)
+        # User.check(user_data)
+        User.validate_request_data(user_data)
         self.user_repo.add(user)
         return user
 
@@ -34,6 +36,7 @@ class HBnBFacade:
 
     def update_user(self, user_id, user_data):
         # Placeholder for logic to update a user
+        User.validate_request_data(user_data)
         obj = self.get_user(user_id)
         if obj:
             obj.update(user_data)
