@@ -23,7 +23,11 @@ class AmenityList(Resource):
         # Placeholder for the logic to register a new amenity
         amenity_data = api.payload
 
-        new_amenity = facade.create_amenity(amenity_data)
+        try:
+            new_amenity = facade.create_amenity(amenity_data)
+        except ValueError as error:
+            return {'error': 'Invalid input data'}, 400
+
         if not new_amenity:
             return {'error': 'Invalid input data'}, 400
         return {'id': new_amenity.id, 'name': new_amenity.name}, 201
@@ -57,7 +61,10 @@ class AmenityResource(Resource):
         # Placeholder for the logic to update an amenity by ID
         amenity_data = api.payload
 
-        updated_amenity = facade.update_amenity(amenity_id, amenity_data)
+        try:
+            updated_amenity = facade.update_amenity(amenity_id, amenity_data)
+        except ValueError as error:
+            return {'error': 'Invalid input Data'}, 400
         if not updated_amenity:
             return {'error': 'Amenity not found'}, 404
         return {'message': 'Amenity updated succefully'}, 200
