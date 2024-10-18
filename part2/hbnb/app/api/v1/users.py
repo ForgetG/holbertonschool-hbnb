@@ -30,7 +30,10 @@ class UserList(Resource):
         if existing_user:
             return {'error': 'Email already registered'}, 400
 
-        new_user = facade.create_user(user_data)
+        try:
+            new_user = facade.create_user(user_data)
+        except ValueError as error:
+            return {'error': 'Invalid input Data'}, 400
         return {'id': new_user.id, 'first_name': new_user.first_name, 'last_name': new_user.last_name, 'email': new_user.email}, 201
 
     @api.response(200, 'OK')
@@ -59,7 +62,16 @@ class UserResource(Resource):
         # Placeholder for the logic to update a user by ID
         user_data = api.payload
 
-        updated_user = facade.update_user(user_id, user_data)
+         # Simulate email uniqueness check (to be replaced by real validation with persistence)
+        existing_user = facade.get_user_by_email(user_data['email'])
+        if existing_user:
+            return {'error': 'Email already registered'}, 400
+
+        try:
+            updated_user = facade.update_user(user_id, user_data)
+        except ValueError as error:
+            return {'error': 'Invalid input data'}, 400
+
         if not updated_user:
             return {'error': 'User not found'}, 404
         return {'id': user_id}, 200

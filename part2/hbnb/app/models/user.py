@@ -33,10 +33,16 @@ class User(BaseModel):
         for key in data.keys():
             value = data[key]
             if key == 'first_name' or key == 'last_name':
-                if isinstance(value, str) and len(value) > 50 and len(value) < 1:
+                if isinstance(value, str) and (len(value) > 50 or len(value) < 1):
                     raise ValueError(f"String must be less than 50 chars or not empty")
-            if key == 'email' and len(value) < 1:
+            elif key == 'email':
                 if (re.match(regex, data["email"])):
                     return data
                 else:
                     raise ValueError(f"Email must follow standard email format")
+            elif key == 'id':
+                try:
+                    uuid_user = uuid.UUID(data[key], version=4)
+                except ValueError:
+                    return ValueError
+                return data

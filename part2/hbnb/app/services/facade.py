@@ -45,6 +45,7 @@ class HBnBFacade:
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
         amenity = Amenity(**amenity_data)
+        Amenity.validate_request_data(amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
 
@@ -58,6 +59,7 @@ class HBnBFacade:
 
     def update_amenity(self, amenity_id, amenity_data):
         # Placeholder for logic to update an amenity
+        Amenity.validate_request_data(amenity_data)
         obj = self.get_amenity(amenity_id)
         if obj:
             obj.update(amenity_data)
