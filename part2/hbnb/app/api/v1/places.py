@@ -2,7 +2,7 @@
 """Module places API endpoint
 """
 from flask_restx import Namespace, Resource, fields
-from app.services.facade import HBnBFacade
+from app.services.facade import facade
 
 api = Namespace('places', description='Place operations')
 
@@ -27,11 +27,9 @@ place_model = api.model('Place', {
     'latitude': fields.Float(required=True, description='Latitude of the place'),
     'longitude': fields.Float(required=True, description='Longitude of the place'),
     'owner_id': fields.String(required=True, description='ID of the owner'),
-    'owner': fields.Nested(user_model, description='Owner details'),
-    'amenities': fields.List(fields.String, required=True, description="List of amenities ID's")
+    #'owner': fields.Nested(user_model, description='Owner details'),
+    'amenities': fields.List(fields.String, required=False, description="List of amenities ID's")
 })
-
-facade = HBnBFacade()
 
 @api.route('/')
 class PlaceList(Resource):
@@ -46,16 +44,24 @@ class PlaceList(Resource):
         try:
             new_place = facade.create_place(place_data)
         except ValueError as error:
-            return {'error': error}, 400
+            return {'error': f"Place not created: {str(error)}"}, 400
 
-        return new_place, 201
+        return {
+            'id': new_place.id,
+            'title': new_place.title,
+            'description': new_place.description,
+            'price': new_place.price,
+            'latitude': new_place.latitude,
+            'longitude': new_place.longitude,
+            "owner_id": new_place.owner_id
+        }, 201
 
     @api.response(200, 'List of places retrieved successfully')
     def get(self):
         """Retrieve a list of all places"""
         # Placeholder for logic to return a list of all places
-        list_of_places = facade.get_all_amenities()
-        return [place for place in list_of_places], 200
+        list_of_places = facade.get_all_places()
+        return [{'id': place.id, 'title': place.title, 'latitude': place.latitude, 'longitude': place.longitude} for place in list_of_places], 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -67,7 +73,29 @@ class PlaceResource(Resource):
         place = facade.get_place(place_id)
         if not place:
             return {'error': 'Place not found'}, 404
-        return {"id": place_id}, 200
+        
+        amenities_json = []
+        print(len(place.amenities))
+        for amenity in place.amenities:
+            print(amenity)
+            print(amenity.id)
+            amenities_json.append({"id": amenity.id, "name": amenity.name})
+
+        return {
+            "id": place.id,
+            "title": place.title,
+            "description": place.description,
+            "price": place.price,
+            "latitude": place.latitude,
+            "longitude": place.longitude,
+            "owner": {
+                "id": place.owner.id,
+                "first_name": place.owner.first_name,
+                "last_name": place.owner.last_name,
+                "email": place.owner.email
+            },
+            "amenities": amenities_json
+        }, 200
 
     @api.expect(place_model)
     @api.response(200, 'Place updated successfully')

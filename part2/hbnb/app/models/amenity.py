@@ -5,8 +5,8 @@ from .base_model import BaseModel
 
 
 class Amenity(BaseModel):
-    def __init__(self, name):
-        super().__init__()
+    def __init__(self, id, name):
+        super().__init__(id)
         self.name = name
 
     def save(self):

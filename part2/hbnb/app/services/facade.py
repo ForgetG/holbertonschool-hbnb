@@ -2,6 +2,7 @@
 """Module facade pattern
 """
 from app.persistence.repository import InMemoryRepository
+import uuid
 from ..models.place import Place
 from ..models.user import User
 from ..models.amenity import Amenity
@@ -16,7 +17,7 @@ class HBnBFacade:
 
     def create_user(self, user_data):
         # Placeholder method for creating a user
-        user = User(**user_data)
+        user = User(**user_data, id=str(uuid.uuid4()))
         # User.check(user_data)
         User.validate_request_data(user_data)
         self.user_repo.add(user)
@@ -44,7 +45,7 @@ class HBnBFacade:
 
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
-        amenity = Amenity(**amenity_data)
+        amenity = Amenity(**amenity_data, id=str(uuid.uuid4()))
         Amenity.validate_request_data(amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
@@ -68,9 +69,12 @@ class HBnBFacade:
     # Places methods
     def create_place(self, place_data) -> Place:
         # Placeholder for logic to create a place, including validation for price, latitude, and longitude
-        #Place.validate_request_data(place_data)
+        Place.validate_request_data(place_data)
 
-        place = Place(**place_data)
+        if 'owner' in place_data and isinstance(place_data['owner'], dict):
+            place_data['owner'] = User(**place_data['owner'])
+
+        place = Place(**place_data, id=str(uuid.uuid4()))
         self.place_repo.add(place)
         return place
 
@@ -80,7 +84,7 @@ class HBnBFacade:
 
     def get_all_places(self) -> list:
         # Placeholder for logic to retrieve all places
-        return list(self.place_repo.values())
+        return list(self.place_repo.get_all())
 
     def update_place(self, place_id, place_data) -> Place:
         # Placeholder for logic to update a place
@@ -90,3 +94,6 @@ class HBnBFacade:
         if obj:
             obj.update(place_data)
         return obj
+
+
+facade = HBnBFacade()

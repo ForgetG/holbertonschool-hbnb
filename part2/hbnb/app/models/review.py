@@ -5,13 +5,12 @@ from .base_model import BaseModel
 
 
 class Review(BaseModel):
-    def __init__(self, text, rating):
+    def __init__(self, text, rating, place, user):
         super().__init__()
         self.text = text
         self.rating = rating
-
-        self.place = None  # store related place
-        self.user = None  # store related user
+        self.place = place
+        self.user = user
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
