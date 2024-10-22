@@ -24,18 +24,13 @@ class Place(BaseModel):
             raise ValueError(f"Owner with ID {owner_id} not found.")
 
         self.amenities = []
-        print(amenities)
         for amenity in amenities:
             amenity_obj = facade.get_amenity(amenity)
             if amenity_obj is None:
                 raise ValueError(f"Amenity with ID {amenity} not found.")
-            print(amenity_obj)
             self.amenities.append(amenity_obj)
 
-        #self.owner = User(**owner) if isinstance(owner, dict) else owner
-        #self.reviews = []  # List to store related reviews
-        #self.amenities = amenities if isinstance(amenities, list) else [amenities]  # List to store related amenities
-
+        self.reviews = []  # List to store related reviews
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
         super().save()
@@ -58,7 +53,10 @@ class Place(BaseModel):
     def validate_request_data(data: dict) -> None:
         for key in data.keys():
             value = data[key]
-            if key == "price":
+            if key == "title":
+                if isinstance(value, str) is False or len(value) < 1 or len(value) > 100:
+                    raise ValueError(f"title: is incorrect, should be a non-empty string.")
+            elif key == "price":
                 if isinstance(value, float) is False or value < 0:
                     raise ValueError(f"price: is incorrect, should be a non-negative float.")
             elif key == "latitude":

@@ -66,3 +66,14 @@ class AmenityResource(Resource):
         if not updated_amenity:
             return {'error': 'Amenity not found'}, 404
         return {'message': 'Amenity updated succefully'}, 200
+
+    @api.response(200, 'Amenity deleted successfully')
+    @api.response(404, 'Amenity not found')
+    def delete(self, amenity_id):
+        """Delete an amenity by ID"""
+        # Placeholder for the logic to delete an amenity by ID
+        amenity = facade.get_amenity(amenity_id)
+        if not amenity:
+            return {'error': 'Amenity not found'}, 404
+        facade.delete_amenity(amenity_id)
+        return {'message': 'Amenity deleted successfully'}, 200

@@ -6,6 +6,7 @@ import uuid
 from ..models.place import Place
 from ..models.user import User
 from ..models.amenity import Amenity
+from ..models.review import Review
 
 
 class HBnBFacade:
@@ -43,6 +44,10 @@ class HBnBFacade:
             obj.update(user_data)
         return obj
 
+    def delete_user(self, user_id):
+        # Placeholder for logic to delete a user
+        return self.user_repo.delete(user_id)
+
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
         amenity = Amenity(**amenity_data, id=str(uuid.uuid4()))
@@ -65,6 +70,11 @@ class HBnBFacade:
         if obj:
             obj.update(amenity_data)
         return obj
+
+    def delete_amenity(self, amenity_id):
+        # Placeholder for logic to delete an amenity
+        return self.amenity_repo.delete(amenity_id)
+
     
     # Places methods
     def create_place(self, place_data) -> Place:
@@ -95,5 +105,41 @@ class HBnBFacade:
             obj.update(place_data)
         return obj
 
+    def delete_place(self, place_id) -> bool:
+        # Placeholder for logic to delete a place
+        return self.place_repo.delete(place_id)
+
+    def create_review(self, review_data):
+    # Placeholder for logic to create a review, including validation for user_id, place_id, and rating
+        review = Review(**review_data, id=str(uuid.uuid4()))
+        Review.validate_request_data(review_data)
+        self.review_repo.add(review)
+        return review
+
+    def get_review(self, review_id):
+    # Placeholder for logic to retrieve a review by ID
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        # Placeholder for logic to retrieve all reviews
+        return list(self.review_repo.get_all())
+
+    def get_reviews_by_place(self, place_id):
+        # Placeholder for logic to retrieve all reviews for a specific place
+        return [review for review in self.review_repo.get_all() if review.place_id == place_id]
+
+    def update_review(self, review_id, review_data):
+        # Placeholder for logic to update a review
+        Review.validate_request_data(review_data)
+
+        obj = self.get_review(review_id)
+        if obj:
+            obj.update(review_data)
+        return obj
+
+
+    def delete_review(self, review_id):
+        # Placeholder for logic to delete a review
+        return self.review_repo.delete(review_id)
 
 facade = HBnBFacade()
