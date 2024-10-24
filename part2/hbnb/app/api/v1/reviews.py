@@ -27,9 +27,10 @@ class ReviewList(Resource):
         try:
             new_review = facade.create_review(review_data)
         except ValueError as error:
-            return {'error': f"Review not created: {str(error)}"}, 400
+            return {'error': "Invalid input data"}, 400
 
         return {
+            'id': new_review.id,
             'text': new_review.text,
             'rating': new_review.rating,
             'user_id': new_review.user_id,

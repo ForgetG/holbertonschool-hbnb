@@ -51,7 +51,7 @@ class PlaceList(Resource):
         try:
             new_place = facade.create_place(place_data)
         except ValueError as error:
-            return {'error': f"Place not created: {str(error)}"}, 400
+            return {'error': "Invalid input data"}, 400
 
         return {
             'id': new_place.id,
