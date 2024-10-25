@@ -7,6 +7,7 @@ from ..models.place import Place
 from ..models.user import User
 from ..models.amenity import Amenity
 from ..models.review import Review
+from datetime import datetime
 
 
 class HBnBFacade:
@@ -18,7 +19,7 @@ class HBnBFacade:
 
     def create_user(self, user_data):
         # Placeholder method for creating a user
-        user = User(**user_data, id=str(uuid.uuid4()))
+        user = User(**user_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
         # User.check(user_data)
         User.validate_request_data(user_data)
         self.user_repo.add(user)
@@ -50,7 +51,7 @@ class HBnBFacade:
 
     def create_amenity(self, amenity_data):
         # Placeholder for logic to create an amenity
-        amenity = Amenity(**amenity_data, id=str(uuid.uuid4()))
+        amenity = Amenity(**amenity_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
         Amenity.validate_request_data(amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
@@ -84,7 +85,7 @@ class HBnBFacade:
         if 'owner' in place_data and isinstance(place_data['owner'], dict):
             place_data['owner'] = User(**place_data['owner'])
 
-        place = Place(**place_data, id=str(uuid.uuid4()))
+        place = Place(**place_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
         self.place_repo.add(place)
         return place
 
@@ -95,6 +96,10 @@ class HBnBFacade:
     def get_all_places(self) -> list:
         # Placeholder for logic to retrieve all places
         return list(self.place_repo.get_all())
+
+    def get_places_by_user_id(self, user_id) -> list:
+        # Placeholder for logic to retrieve all places for a specific user
+        return [place for place in self.place_repo.get_all() if place.owner_id == user_id]
 
     def update_place(self, place_id, place_data) -> Place:
         # Placeholder for logic to update a place
@@ -111,7 +116,7 @@ class HBnBFacade:
 
     def create_review(self, review_data):
     # Placeholder for logic to create a review, including validation for user_id, place_id, and rating
-        review = Review(**review_data, id=str(uuid.uuid4()))
+        review = Review(**review_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
         Review.validate_request_data(review_data)
         self.review_repo.add(review)
         return review

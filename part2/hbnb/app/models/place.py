@@ -9,9 +9,9 @@ from .amenity import Amenity
 
 
 class Place(BaseModel):
-    def __init__(self, id, title, description, price, latitude, longitude, owner_id: str, amenities: list):
+    def __init__(self, id, created_at, updated_at, title, description, price, latitude, longitude, owner_id: str, amenities: list):
         from ..services.facade import facade
-        super().__init__(id)
+        super().__init__(id, created_at, updated_at)
         self.title = title
         self.description = description
         self.price = price
