@@ -71,10 +71,13 @@ class UserResource(Resource):
         if user_id != current_user["id"]:
             return {'error': 'Unauthorized action'}, 403
 
-         # Simulate email uniqueness check (to be replaced by real validation with persistence)
-        #existing_user = facade.get_user_by_email(user_data['email'])
-        #if existing_user:
-         #   return {'error': 'Email already registered'}, 400
+        # Simulate email uniqueness check (to be replaced by real validation with persistence)
+        existing_user = facade.get_user_by_email(user_data['email'])
+        if existing_user:
+           return {'error': 'Email already registered'}, 400
+
+        if current_user.get("is_admin"):
+            restricted_fields = []
 
         for field in restricted_fields:
             if field in user_data:
