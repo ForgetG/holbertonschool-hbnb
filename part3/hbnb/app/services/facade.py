@@ -22,6 +22,7 @@ class HBnBFacade:
         user = User(**user_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
         # User.check(user_data)
         User.validate_request_data(user_data)
+        user.hash_password(user.password)
         self.user_repo.add(user)
         return user
 

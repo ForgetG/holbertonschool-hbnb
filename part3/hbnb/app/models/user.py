@@ -13,12 +13,13 @@ regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
 
 
 class User(BaseModel):
-    def __init__(self, id, created_at, updated_at, first_name, last_name, email):
+    def __init__(self, id, created_at, updated_at, first_name, last_name, email, password):
         from app.services.facade import facade
         super().__init__(id, created_at, updated_at)
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.password = password
         self.is_admin = False
         self.places = facade.get_places_by_user_id(id)  # list to store related places
 
