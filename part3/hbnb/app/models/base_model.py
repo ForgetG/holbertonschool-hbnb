@@ -1,15 +1,17 @@
 #!/usr/bin/python3
 """Module base_model
 """
+from app import db
 import uuid
 from datetime import datetime
 
 
-class BaseModel:
-    def __init__(self, id, created_at, updated_at):
-        self.id = id
-        self.created_at = created_at
-        self.updated_at = updated_at
+class BaseModel(db.Model):
+    __abstract__ = True
+
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""
