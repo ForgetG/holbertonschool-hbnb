@@ -2,15 +2,14 @@
 """Module review business logic class
 """
 from .base_model import BaseModel
+from app.db_app import db
 
 
 class Review(BaseModel):
-    def __init__(self, id, created_at, updated_at, text, rating, place_id, user_id):
-        super().__init__(id, created_at, updated_at)
-        self.text = text
-        self.rating = rating
-        self.place_id = place_id
-        self.user_id = user_id
+    __tablename__ = 'reviews'
+
+    text = db.Column(db.String(255), nullable=False)
+    rating = db.Column(db.Integer, nullable=False)
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""

@@ -2,7 +2,7 @@
 """Module in-memory repository
 """
 from abc import ABC, abstractmethod
-from app import db
+from app.db_app import db
 
 class Repository(ABC):
     @abstractmethod

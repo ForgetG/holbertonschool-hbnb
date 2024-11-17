@@ -3,21 +3,20 @@
 """
 from flask import Flask
 from flask_restx import Api
-from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
-from flask_sqlalchemy import SQLAlchemy
 from app.api.v1.users import api as users_ns
 from app.api.v1.places import api as places_ns
 from app.api.v1.amenities import api as amenities_ns
 from app.api.v1.reviews import api as reviews_ns
-from app.api.v1.auth import api as auth_ns
-from app.api.v1.admin import api as admin_ns
+# from app.api.v1.auth import api as auth_ns
+# from app.api.v1.admin import api as admin_ns
 
-bcrypt = Bcrypt()
 jwt = JWTManager()
-db = SQLAlchemy()
 
 def create_app(config_class="config.DevelopmentConfig"):
+    from app.db_app import db
+    from app.bcrypt_app import bcrypt
+
     app = Flask(__name__)
     app.config.from_object(config_class)
     api = Api(app, version='1.0', title='HBnB API', description='HBnB Application API')
@@ -34,11 +33,11 @@ def create_app(config_class="config.DevelopmentConfig"):
     # Register the reviews namespace
     api.add_namespace(reviews_ns, path='/api/v1/reviews')
 
-    # Register the authentification namespace
-    api.add_namespace(auth_ns, path='/api/v1/auth')
+    # # Register the authentification namespace
+    # api.add_namespace(auth_ns, path='/api/v1/auth')
 
-    # Register the administrator namespace
-    api.add_namespace(admin_ns, path='/api/v1/admin')
+    # # Register the administrator namespace
+    # api.add_namespace(admin_ns, path='/api/v1/admin')
 
     bcrypt.init_app(app)
     jwt.init_app(app)

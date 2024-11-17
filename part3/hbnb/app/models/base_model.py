@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Module base_model
 """
-from app import db
+from app.db_app import db
 import uuid
 from datetime import datetime
 

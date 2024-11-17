@@ -2,12 +2,13 @@
 """Module amenity business logic class
 """
 from .base_model import BaseModel
+from app.db_app import db
 
 
 class Amenity(BaseModel):
-    def __init__(self, id, created_at, updated_at, name):
-        super().__init__(id, created_at, updated_at)
-        self.name = name
+    __tablename__ = 'amenities'
+
+    name = db.Column(db.String(255), nullable=False)
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""

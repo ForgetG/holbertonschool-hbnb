@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 """Module user business logic class
 """
-from app import db, bcrypt
+from app.bcrypt_app import bcrypt
+from app.db_app import db
 import uuid
-from datetime import datetime
 from .base_model import BaseModel
 import re
 
