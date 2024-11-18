@@ -3,6 +3,9 @@
 """
 from .base_model import BaseModel
 from app.db_app import db
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
+
 
 
 class Review(BaseModel):
@@ -10,6 +13,8 @@ class Review(BaseModel):
 
     text = db.Column(db.String(255), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
+    place_id = Column(Integer, ForeignKey('places.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""

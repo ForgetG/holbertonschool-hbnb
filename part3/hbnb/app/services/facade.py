@@ -8,6 +8,7 @@ from ..models.user import User
 from ..models.amenity import Amenity
 from ..models.review import Review
 from datetime import datetime
+from app.services.repositories.user_repository import UserRepository
 
 
 class HBnBFacade:
@@ -32,7 +33,7 @@ class HBnBFacade:
 
     def get_user_by_email(self, email):
         # Placeholder method for fetching a user by email
-        return self.user_repo.get_by_attribute('email', email)
+        return self.user_repo.get_by_email(email)
 
     def get_all_users(self):
         # Placeholder for logic to retrieve a list of all users
