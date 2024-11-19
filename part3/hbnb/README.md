@@ -1,4 +1,3 @@
-
 # 🐇 HBnB Evolution part3: Enhanced Backend with Authentication and Database Integration 🐇
 
 Welcome to Part 3 of the HBnB Project, where you will extend the backend of the application by introducing user authentication, authorization, and database integration using SQLAlchemy and SQLite for development.In this part, you will secure the backend, introduce persistent storage, and prepare the application for a scalable, real-world deployment.
@@ -68,3 +67,55 @@ Welcome to Part 3 of the HBnB Project, where you will extend the backend of the 
     10. Created an ER diagram in Mermaid.js that accurately represents the database schema for HBnB.
         Understood the various types of relationships (one-to-many, many-to-many) and how they are represented visually.
         Exported the diagram to be included in your project documentation.
+## Database ER Diagram
+
+```mermaid
+erDiagram
+USER ||--o{ PLACE : owns
+USER {
+    integer id PK
+    string first_name
+    string last_name
+    string email
+    string password
+    boolean is_admin
+}
+PLACE ||--o{ REVIEW : have
+PLACE{
+    integer id PK
+    string title
+    string description
+    float price
+    float latitude
+    float longitude
+    integer owner_id FK
+}
+USER ||--o{ REVIEW : write
+REVIEW {
+    integer id PK
+    string text
+    integer rating
+    integer user_id FK
+    integer place_id FK
+}
+PLACE }|--|{ PLACE_AMENITY : have
+AMENITY {
+    integer id PK
+    string name
+}
+PLACE_AMENITY {
+    integer place_id FK
+    integer amenity_id FK
+}
+USER ||--o{ RESERVATION : make
+RESERVATION {
+    integer id PK
+    integer user_id FK
+    integer place_id FK
+    float total_price
+    date check_in
+    date check_out
+    string status
+}
+PLACE ||--o{ RESERVATION : reserve
+```
