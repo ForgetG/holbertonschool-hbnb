@@ -107,15 +107,5 @@ PLACE_AMENITY {
     integer place_id FK
     integer amenity_id FK
 }
-USER ||--o{ RESERVATION : make
-RESERVATION {
-    integer id PK
-    integer user_id FK
-    integer place_id FK
-    float total_price
-    date check_in
-    date check_out
-    string status
-}
-PLACE ||--o{ RESERVATION : reserve
+PLACE_AMENITY ||--|| AMENITY : have
 ```
