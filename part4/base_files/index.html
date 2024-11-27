@@ -8,12 +8,16 @@
 </head>
 <body>
     <header>
-        <img src="logo.png" alt="Logo" class="logo">
-        <a href="login.html" class="login-button">Login</a>
+        <img src="images/logo.png" alt="Logo" class="logo">
+        <nav>
+            <a href="index.html" class="index-button">Index</a>
+            <a href="login.html" class="login-button" id="login-link">Login</a>
+        </nav>
     </header>
     <main>
+        <h1>Available Places</h1>
         <section id="filter">
-            <label for="price-filter">Max Price:</label>
+            <label for="price-filter"><strong>Max Price:</strong></label>
             <select id="price-filter">
                 <!-- Options will be populated dynamically -->
             </select>
@@ -22,6 +26,9 @@
             <!-- List of places will be populated dynamically -->
         </section>
     </main>
+    <footer>
+        <p>© 2024 HBnB Evolution. All rights reserved.</p>
+    </footer>
     <script src="scripts.js"></script>
 </body>
 </html>

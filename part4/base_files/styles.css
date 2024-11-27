@@ -1,7 +1,6 @@
-/* 
-  This is a SAMPLE File to get you started. Follow the instructions on the project to complete the tasks. 
-  You'll probably need to override some of theese styles.
-*/
+:root {
+    --main: #FF9800;
+}
 
 * {
     box-sizing: border-box;
@@ -16,9 +15,23 @@ body {
 }
 
 header {
-    background-color: #333;
+    background-color: var(--main);
     color: #fff;
     padding: 1rem;
+    display: flex;
+}
+nav {
+    text-align: right;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+}
+
+h1, h2 {
+    text-align: center;
+}
+h3 {
+    font-size: 21px;
 }
 
 nav a {
@@ -29,4 +42,92 @@ nav a {
 
 main {
     padding: 2rem;
+}
+button {
+    background-color: var(--main);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 17px;
+    margin: 15px;
+}
+
+footer {
+    background-color: var(--main);
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+
+#filter {
+    text-align: center;
+    margin: 15px;
+}
+#places-list {
+    display: flex;
+}
+
+.place-card, .review-card {
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    width: 30%;
+    display: inline-block;
+}
+.place-card p, .review-card p {
+    margin: 7px;
+}
+.place-card h2, .review-card h2 {
+    margin: 15px 0;
+}
+
+.review-card {
+    margin: 10px 0;
+    width: 100%;
+    text-align: left;
+}
+
+.place-info {
+    margin: 20px auto;
+    padding: 40px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+    width: 100%;
+}
+.place-info p {
+    margin: 10px;
+}
+
+#add-review {
+    margin-top: 50px;
+}
+#review-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+}
+#review-form textarea {
+    height: 100px;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+#review-form label {
+    margin-right: auto;
+    font-weight: 700;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#review-form select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
 }

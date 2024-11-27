@@ -4,6 +4,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
 
 api = Namespace('places', description='Place operations')
 
@@ -49,7 +50,7 @@ class PlaceList(Resource):
     def post(self):
         """Register a new place"""
         # Placeholder for the logic to register a new place
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         place_data = api.payload
 
         place_data['owner_id'] = current_user["id"]
@@ -57,6 +58,7 @@ class PlaceList(Resource):
         try:
             new_place = facade.create_place(place_data)
         except ValueError as error:
+            print(error)
             return {'error': "Invalid input data"}, 400
 
         return {
@@ -74,7 +76,7 @@ class PlaceList(Resource):
         """Retrieve a list of all places"""
         # Placeholder for logic to return a list of all places
         list_of_places = facade.get_all_places()
-        return [{'id': place.id, 'title': place.title, 'latitude': place.latitude, 'longitude': place.longitude} for place in list_of_places], 200
+        return [{'id': place.id, 'title': place.title, 'price': place.price, 'latitude': place.latitude, 'longitude': place.longitude} for place in list_of_places], 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
@@ -88,8 +90,12 @@ class PlaceResource(Resource):
             return {'error': 'Place not found'}, 404
         
         amenities_json = []
-        for amenity in place.amenities:
-            amenities_json.append({"id": amenity.id, "name": amenity.name})
+        for place_amenity in place.amenities:
+            amenity = facade.get_amenity(place_amenity.amenity_id)
+            if amenity:
+                amenities_json.append({"id": amenity.id, "name": amenity.name})
+
+        owner = facade.get_user(place.owner_id)
 
         return {
             "id": place.id,
@@ -99,10 +105,10 @@ class PlaceResource(Resource):
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": {
-                "id": place.owner.id,
-                "first_name": place.owner.first_name,
-                "last_name": place.owner.last_name,
-                "email": place.owner.email
+                "id": owner.id,
+                "first_name": owner.first_name,
+                "last_name": owner.last_name,
+                "email": owner.email
             },
             "amenities": amenities_json
         }, 200
@@ -116,7 +122,7 @@ class PlaceResource(Resource):
     def put(self, place_id):
         """Update a place's information"""
         # Placeholder for the logic to update a place by ID
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         place = facade.get_place(place_id)
         if place.owner_id != current_user["id"]:
             return {'error': 'Unauthorized action'}, 403

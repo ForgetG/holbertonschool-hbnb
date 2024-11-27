@@ -2,6 +2,7 @@ from flask_restx import Namespace, Resource
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.services.facade import facade
 from flask import request
+import json
 
 api = Namespace('admin', description='Admin operations')
 
@@ -12,7 +13,7 @@ class AdminUserCreate(Resource):
     @api.response(201, 'User created successfully')
     @jwt_required()
     def post(self):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -36,7 +37,7 @@ class AdminUserModify(Resource):
     @api.response(200, 'User updated successfully')
     @jwt_required()
     def put(self, user_id):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -59,7 +60,7 @@ class AdminAmenityCreate(Resource):
     @api.response(201, 'Amenity created successfully')
     @jwt_required()
     def post(self):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -74,7 +75,7 @@ class AdminAmenityModify(Resource):
     @api.response(200, 'Amenity updated successfully')
     @jwt_required()
     def put(self, amenity_id):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 
@@ -89,7 +90,7 @@ class AdminPlaceModify(Resource):
     @api.response(403, 'Unauthorized action')
     @api.response(200, 'Place updated successfully')
     def put(self, place_id):
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
 
         # Set is_admin default to False if not exists
         is_admin = current_user.get('is_admin', False)

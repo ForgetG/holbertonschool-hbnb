@@ -5,15 +5,14 @@ from app.db_app import db
 from .base_model import BaseModel
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-#from models.user import User
+from ..models.amenity import Amenity
 
 
-place_amenity = db.Table('place_amenity',
-    db.metadata,
-    Column('place_id', Integer, ForeignKey('places.id'), primary_key=True),
-    Column('amenity_id', Integer, ForeignKey('amenities.id'), primary_key=True),
-    extend_existing=True
-)
+class PlaceAmenity(db.Model):
+    __tablename__ = 'place_amenity'
+    place_id = db.Column(db.Integer, db.ForeignKey('places.id'), primary_key=True)
+    amenity_id = db.Column(db.Integer, db.ForeignKey('amenities.id'), primary_key=True)
+
 
 class Place(BaseModel):
     __tablename__ = 'places'
@@ -23,10 +22,9 @@ class Place(BaseModel):
     price = db.Column(db.Float, nullable=False)
     latitude = db.Column(db.Float, nullable=False)
     longitude = db.Column(db.Float, nullable=False)
-    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
-    children_review = relationship('reviews', backref='places', lazy=True)
-    amenities = relationship('amenities', secondary=place_amenity, lazy='subquery',
-                             backref=db.backref('places', lazy=True))
+    owner_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    reviews = relationship('Review', backref='places', lazy=True)
+    amenities = relationship(PlaceAmenity, lazy='subquery', backref=db.backref('places', lazy=True))
 
     # TODO: Verification of the owner_id and amenities
     # def __init__(self):

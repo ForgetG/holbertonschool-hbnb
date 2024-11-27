@@ -6,7 +6,6 @@ from app.db_app import db
 import uuid
 from .base_model import BaseModel
 import re
-from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
 regex = r'^[\w\.-]+@[\w\.-]+\.\w+$'
@@ -20,8 +19,8 @@ class User(BaseModel):
     email = db.Column(db.String(120), nullable=False, unique=True)
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
-    children_places = relationship('places', backref='users', lazy=True)
-    children_reviews = relationship('reviews', backref='users', lazy=True)
+    places = relationship('Place', backref='users', lazy=True)
+    # children_reviews = relationship('reviews', backref='users', lazy=True)
 
     def save(self):
         """Update the updated_at timestamp whenever the object is modified"""

@@ -4,6 +4,7 @@
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import facade
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
 
 api = Namespace('reviews', description='Review operations')
 
@@ -28,7 +29,7 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         # Placeholder for the logic to register a new review
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         review_data = api.payload
         review_data["user_id"] = current_user["id"]
 
@@ -87,7 +88,7 @@ class ReviewResource(Resource):
     def put(self, review_id):
         """Update a review's information"""
         # Placeholder for the logic to update a review by ID
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         review_data = api.payload
         review_data["user_id"] = current_user["id"]
 
@@ -110,7 +111,7 @@ class ReviewResource(Resource):
     def delete(self, review_id):
         """Delete a review"""
         # Placeholder for the logic to delete a review
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         review = facade.get_review(review_id)
 
         if review["user_id"] != current_user["id"]:

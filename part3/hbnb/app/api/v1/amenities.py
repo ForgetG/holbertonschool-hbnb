@@ -3,8 +3,8 @@
 """
 from flask_restx import Namespace, Resource, fields
 from app.services.facade import facade
-from flask import request
-from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
+from flask_jwt_extended import jwt_required, get_jwt_identity
+import json
 
 api = Namespace('amenities', description='Amenity operations')
 
@@ -23,7 +23,7 @@ class AmenityList(Resource):
     def post(self):
         """Register a new amenity"""
         # Placeholder for the logic to register a new amenity
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
         amenity_data = api.payload
@@ -66,7 +66,7 @@ class AmenityResource(Resource):
     def put(self, amenity_id):
         """Update an amenity's information"""
         # Placeholder for the logic to update an amenity by ID
-        current_user = get_jwt_identity()
+        current_user = json.loads(get_jwt_identity())
         if not current_user.get('is_admin'):
             return {'error': 'Admin privileges required'}, 403
 

@@ -1,20 +1,21 @@
 #!/usr/bin/python3
 """Module facade pattern
 """
+from copy import copy
 from app.persistence.repository import SQLAlchemyRepository
 import uuid
-from ..models.place import Place
+from ..models.place import Place, PlaceAmenity
 from ..models.user import User
 from ..models.amenity import Amenity
 from ..models.review import Review
 from datetime import datetime
-from app.services.repositories.user_repository import UserRepository
 
 
 class HBnBFacade:
     def __init__(self):
         self.user_repo = SQLAlchemyRepository(User)
         self.place_repo = SQLAlchemyRepository(Place)
+        self.place_amenity_repo = SQLAlchemyRepository(PlaceAmenity)
         self.review_repo = SQLAlchemyRepository(Review)
         self.amenity_repo = SQLAlchemyRepository(Amenity)
 
@@ -33,7 +34,7 @@ class HBnBFacade:
 
     def get_user_by_email(self, email):
         # Placeholder method for fetching a user by email
-        return self.user_repo.get_by_email(email)
+        return self.user_repo.get_by_attribute("email", email)
 
     def get_all_users(self):
         # Placeholder for logic to retrieve a list of all users
@@ -84,11 +85,23 @@ class HBnBFacade:
         # Placeholder for logic to create a place, including validation for price, latitude, and longitude
         Place.validate_request_data(place_data)
 
-        if 'owner' in place_data and isinstance(place_data['owner'], dict):
-            place_data['owner'] = User(**place_data['owner'])
+        # if 'owner' in place_data and isinstance(place_data['owner'], dict):
+        #     place_data['owner'] = User(**place_data['owner'])
 
-        place = Place(**place_data, id=str(uuid.uuid4()), created_at=datetime.now(), updated_at=datetime.now())
+        amenities = copy(place_data['amenities'])
+        del place_data['amenities']
+        place = Place(
+            **place_data,
+            id=str(uuid.uuid4()),
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
+        )
         self.place_repo.add(place)
+
+        if amenities:
+            for amenity_id in amenities:
+                place_amenity = PlaceAmenity(place_id=place.id, amenity_id=amenity_id)
+                self.place_amenity_repo.add(place_amenity)
         return place
 
     def get_place(self, place_id) -> Place:
